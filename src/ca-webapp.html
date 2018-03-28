@@ -196,7 +196,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         return {
           backendUrl: {
             type: String,
-            value: "http://localhost/"
+            value: window.location.protocol + '//' + window.location.hostname + '/'
           },
           contacts: Array,
           file: Object,
