@@ -209,8 +209,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         this.getContacts();
       }
 
-      _fileChanged(e) {
-        let file = e.path[0].files[0];
+      _fileChanged(e) {;
+        let file = this.$.fileInput.files[0];
         this.file = file;
 
         var reader = new FileReader();
