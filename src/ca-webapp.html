@@ -19,6 +19,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/iron-image/iron-image.html">
 <link rel="import" href="../bower_components/paper-input/paper-input.html">
 <link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bower_components/paper-radio-button/paper-radio-button.html">
+<link rel="import" href="../bower_components/paper-radio-group/paper-radio-group.html">
 
 <link rel="import" href="ca-contact.html">
 
@@ -124,14 +126,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     </style>
 
     <iron-ajax id="ajax"
-      url="[[backendUrl]]ca-backend/api/1.1/tables/contacts/rows"
+      url="[[backendUrl]]ca-backend/"
       content-type="application/json"
-      method="GET"
-      params='{"depth":"2"}'>
+      method="GET">
     </iron-ajax>
 
     <iron-ajax id="uploadAjax"
-      url="[[backendUrl]]ca-backend/api/1.1/tables/contacts/rows"
+      url="[[backendUrl]]ca-backend/"
       content-type="application/json"
       method="POST">
     </iron-ajax>
@@ -159,13 +160,18 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             </div>
 
             <paper-input id="nameInput" label="Name" value="{{name}}" required></paper-input>
+            <paper-input id="dateInput" label="Geburtsdatum" value="{{date}}" type="date" required></paper-input>
+            <paper-radio-group selected="{{gender}}" fallback-selection="w">
+              <paper-radio-button name="w">Weiblich</paper-radio-button>
+              <paper-radio-button name="m">Männlich</paper-radio-button>
+            </paper-radio-group>
             <paper-button on-click="_saveContact">save</paper-button>
           </div>
 
           <h2>Eingetragene Nutzer</h2>
           <div class="contact-list">
             <template is="dom-repeat" items="{{contacts}}">
-              <ca-contact name="[[item.name]]" img-path="[[backendUrl]][[item.image.data.url]]"></ca-contact>
+              <ca-contact name="[[item.name]]" gender="[[item.gender]]" birthdate="[[item.birthdate]]" img-path="[[backendUrl]][[item.image.data.url]]"></ca-contact>
             </template>
           </div>
 
@@ -176,8 +182,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
   <script>
     let defaultContacts = [
-      {name: "Felix"},
-      {name: "Georg"}
+      {name: "Felix", birthdate: "01.01.2018", gender: "m"},
+      {name: "Georg", birthdate: "01.01.2018", gender: "m"}
     ];
     // Gesture events like tap and track generated from touch will not be
     // preventable, allowing for better scrolling performance.
@@ -195,7 +201,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           contacts: Array,
           file: Object,
           fileBase64: String,
-          name: String
+          name: String,
+          date: String,
+          gender: String
         };
       }
 
@@ -251,7 +259,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           }
         }
 
-        ajax.headers['Authorization'] = 'Bearer QQ2RsXYJbfy2yNAQAZ1L1g8Ceg2H4Z73' ;
         let request = ajax.generateRequest();
         request.completes
           .then((req) => {
