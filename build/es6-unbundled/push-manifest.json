@@ -364,6 +364,46 @@
       "type": "document",
       "weight": 1
     },
+    "bower_components/paper-radio-button/paper-radio-button.html": {
+      "type": "document",
+      "weight": 1
+    },
+    "bower_components/paper-behaviors/paper-checked-element-behavior.html": {
+      "type": "document",
+      "weight": 1
+    },
+    "bower_components/iron-checked-element-behavior/iron-checked-element-behavior.html": {
+      "type": "document",
+      "weight": 1
+    },
+    "bower_components/paper-behaviors/paper-inky-focus-behavior.html": {
+      "type": "document",
+      "weight": 1
+    },
+    "bower_components/paper-radio-group/paper-radio-group.html": {
+      "type": "document",
+      "weight": 1
+    },
+    "bower_components/iron-menu-behavior/iron-menubar-behavior.html": {
+      "type": "document",
+      "weight": 1
+    },
+    "bower_components/iron-menu-behavior/iron-menu-behavior.html": {
+      "type": "document",
+      "weight": 1
+    },
+    "bower_components/iron-selector/iron-multi-selectable.html": {
+      "type": "document",
+      "weight": 1
+    },
+    "bower_components/iron-selector/iron-selectable.html": {
+      "type": "document",
+      "weight": 1
+    },
+    "bower_components/iron-selector/iron-selection.html": {
+      "type": "document",
+      "weight": 1
+    },
     "src/ca-contact.html": {
       "type": "document",
       "weight": 1

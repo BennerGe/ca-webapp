@@ -160,7 +160,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             </div>
 
             <paper-input id="nameInput" label="Name" value="{{name}}" required></paper-input>
-            <paper-input id="dateInput" label="Geburtsdatum" value="{{date}}" type="date" required></paper-input>
+            <paper-input id="dateInput" label="Geburtsdatum" value="{{birthdate}}" type="date" required></paper-input>
             <paper-radio-group selected="{{gender}}" fallback-selection="w">
               <paper-radio-button name="w">Weiblich</paper-radio-button>
               <paper-radio-button name="m">Männlich</paper-radio-button>
@@ -171,7 +171,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           <h2>Eingetragene Nutzer</h2>
           <div class="contact-list">
             <template is="dom-repeat" items="{{contacts}}">
-              <ca-contact name="[[item.name]]" gender="[[item.gender]]" birthdate="[[item.birthdate]]" img-path="[[backendUrl]][[item.image.data.url]]"></ca-contact>
+              <ca-contact name="[[item.user_name.S]]" gender="[[item.gender.S]]" birthdate="[[item.birthdate.S]]" img-path="[[item.image_path.S]]"></ca-contact>
             </template>
           </div>
 
@@ -202,7 +202,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           file: Object,
           fileBase64: String,
           name: String,
-          date: String,
+          birthdate: String,
           gender: String
         };
       }
@@ -234,38 +234,37 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
 
       _saveContact() {
-        if(!this.$.nameInput.validate()) {
+        if(!this.$.nameInput.validate() || !this.$.dateInput.validate()) {
           return;
         }
 
-        let name = this.name;
         let file = this.file;
         let base64Data = this.fileBase64;
         let ajax = this.$.uploadAjax;
 
-        if(!file) {
-          ajax.body = {
-            name: name,
-          }
-        } else {
-          ajax.body = {
-            name: name,
-            image: {
-              charset: "binary",
-              data: base64Data,
-              name: file.name,
-              type: file.type
-            }
+        ajax.body = {
+          user_name: this.name,
+          birthdate: this.birthdate,
+          gender: this.gender
+        }
+
+        if(file) {
+          ajax.body["image"] = {
+            charset: "binary",
+            data: base64Data,
+            name: file.name,
+            type: file.type
           }
         }
 
         let request = ajax.generateRequest();
         request.completes
           .then((req) => {
-            this.name = undefined;
-            this.file = {};
-            this.fileBase64 = "";
-            this.getContacts();
+            console.log(req.response);
+            if(req.response.success) {
+              this.reset();
+              this.getContacts();
+            }
           })
           .catch(() => {
             console.log("Upload Error")
@@ -276,12 +275,20 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         let request = this.$.ajax.generateRequest();
         request.completes
           .then((req) => {
-            this.contacts = req.response.data;
+            this.contacts = req.response;
           })
           .catch(() => {
             console.log("Error");
             this.contacts = defaultContacts;
           });
+      }
+
+      reset() {
+        this.name = undefined;
+        this.birthdate = undefined;
+        this.gender = undefined;
+        this.file = {};
+        this.fileBase64 = "";
       }
     }
 
